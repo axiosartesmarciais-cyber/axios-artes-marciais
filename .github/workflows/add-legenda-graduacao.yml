@@ -1,0 +1,67 @@
+name: Adicionar legenda graduação Defensores
+
+on:
+  push:
+    paths:
+      - '.github/workflows/add-legenda-graduacao.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  atualizar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Inserir legenda oficial
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          p = Path("index.html")
+          html = p.read_text(encoding="utf-8")
+
+          if "Primeiros Faixas Amarelas do Projeto Social Defensores</strong>" in html:
+              raise SystemExit(0)
+
+          anchor = '<section id="videos" class="project">'
+
+          section = '''
+          <section id="graduacoes-defensores" class="project">
+            <div class="wrap">
+              <div class="section-head">
+                <span class="eyebrow">Graduação</span>
+                <h2>Os primeiros faixas amarelas do Projeto Social Defensores</h2>
+                <p>Um momento especial na história da Axios. A primeira graduação dos alunos do Projeto Social Defensores representa disciplina, esforço, superação e crescimento dentro das artes marciais.</p>
+              </div>
+
+              <div class="feature">
+                <span class="tag">Legenda oficial</span>
+                <p><strong>Primeiros Faixas Amarelas do Projeto Social Defensores</strong></p>
+                <p>Mais do que receber uma nova faixa, cada aluno celebra uma etapa construída com disciplina, respeito, coragem, dedicação e perseverança. Esta graduação representa o primeiro grande passo no caminho marcial dos nossos Defensores e marca um capítulo especial na história da Axios Artes Marciais.</p>
+                <p>Que cada faixa conquistada seja também um lembrete de que evolução não acontece de uma vez. Ela é construída treino após treino, escolha após escolha.</p>
+                <p><strong>Axios Artes Marciais<br>Treinar para a vida. Evoluir para sempre.</strong></p>
+              </div>
+            </div>
+          </section>
+          '''
+
+          if anchor in html:
+              html = html.replace(anchor, section + "\n" + anchor, 1)
+          else:
+              html = html.replace("</main>", section + "\n</main>", 1)
+
+          p.write_text(html, encoding="utf-8")
+          PY
+
+      - name: Salvar atualização
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git diff --cached --quiet && exit 0
+          git commit -m "Adicionar legenda oficial da graduação do Projeto Defensores"
+          git push
