@@ -1,0 +1,36 @@
+name: Corrigir imagem Caminho Leve
+
+on:
+  push:
+    paths:
+      - '.github/workflows/fix-caminho-leve.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  corrigir:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Corrigir referência da imagem
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path("index.html")
+          html = p.read_text(encoding="utf-8")
+          html = html.replace('assets/caminho-leve-tai-chi.webp', 'Caminho-Leve.jpg')
+          p.write_text(html, encoding="utf-8")
+          PY
+
+      - name: Salvar correção
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git diff --cached --quiet && exit 0
+          git commit -m "Corrigir imagem do projeto Caminho Leve"
+          git push
