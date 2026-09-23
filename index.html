@@ -181,6 +181,12 @@
     .media-placeholder strong{display:block;color:#fff;font-size:20px;margin-bottom:6px}
     .media-body{padding:18px}
     .media-body p{margin:0;color:var(--muted)}
+    .graduation-gallery{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:24px}
+    .graduation-gallery figure{margin:0;overflow:hidden;border:1px solid var(--line);border-radius:18px;background:var(--panel)}
+    .graduation-gallery img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover}
+    .graduation-gallery figcaption{padding:12px 16px;color:var(--muted);font-size:14px}
+    @media(max-width:700px){.graduation-gallery{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    @media(max-width:440px){.graduation-gallery{grid-template-columns:1fr}}
     .video-frame{
       aspect-ratio:16/9;border-radius:18px;border:1px solid var(--line);
       overflow:hidden;background:#0b0d11;display:grid;place-items:center;
@@ -501,6 +507,17 @@
       <p>Mais do que receber uma nova faixa, cada aluno celebra uma etapa construída com disciplina, respeito, coragem, dedicação e perseverança. Esta graduação representa o primeiro grande passo no caminho marcial dos nossos Defensores e marca um capítulo especial na história da Axios Artes Marciais.</p>
       <p>Que cada faixa conquistada seja também um lembrete de que evolução não acontece de uma vez. Ela é construída treino após treino, escolha após escolha.</p>
       <p><strong>Axios Artes Marciais<br>Treinar para a vida. Evoluir para sempre.</strong></p>
+    </div>
+    <div class="graduation-gallery" aria-label="Fotos da primeira graduação do Projeto Social Defensores">
+      <figure><img src="Postura%20de%20Sentido.jpg" alt="Alunos em posição de sentido durante a primeira graduação do Projeto Social Defensores" loading="lazy"><figcaption>Preparação para a avaliação</figcaption></figure>
+      <figure><img src="Cumprimento.jpg" alt="Alunos fazem o cumprimento na avaliação de Boxe Chinês" loading="lazy"><figcaption>Respeito desde o primeiro movimento</figcaption></figure>
+      <figure><img src="Postura%20de%20Descanso.jpg" alt="Alunos aguardam orientações durante o exame de graduação" loading="lazy"><figcaption>Disciplina e atenção</figcaption></figure>
+      <figure><img src="Juan%2003.jpg" alt="Aluno recebe a faixa amarela na cerimônia de graduação" loading="lazy"><figcaption>A conquista da faixa amarela</figcaption></figure>
+      <figure><img src="Kevin%2005.jpg" alt="Aluno exibe o certificado e a faixa após a graduação" loading="lazy"><figcaption>Uma conquista para celebrar</figcaption></figure>
+      <figure><img src="Leonan%2003.jpg" alt="Aluno posa com o instrutor após receber o certificado" loading="lazy"><figcaption>O resultado de cada treino</figcaption></figure>
+      <figure><img src="Lorenzo%2003.jpg" alt="Aluno recebe o reconhecimento pela primeira graduação" loading="lazy"><figcaption>Cada passo tem seu valor</figcaption></figure>
+      <figure><img src="Miguel%2004.jpg" alt="Aluno segura certificado na cerimônia de graduação" loading="lazy"><figcaption>Dedicação reconhecida</figcaption></figure>
+      <figure><img src="Noah%2007.jpg" alt="Aluno mostra sua faixa e certificado ao lado do instrutor" loading="lazy"><figcaption>O início de uma nova etapa</figcaption></figure>
     </div>
   </div>
 </section>
