@@ -1,0 +1,73 @@
+name: Adicionar depoimento Valeria
+
+on:
+  push:
+    paths:
+      - '.github/workflows/add-depoimento-valeria.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  atualizar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Inserir depoimento no site
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+
+          p = Path("index.html")
+          html = p.read_text(encoding="utf-8")
+
+          if "@valeriacmsmiranda" in html:
+              raise SystemExit(0)
+
+          card = '''
+        <article class="quote">
+          <p>“Tai Chi é extremamente perfeito ao me proporcionar bem estar físico integrado ao relaxamento muscular com serenidade e tranquilidade mental! Muito grata 🙏🏼”</p>
+          <small><a href="https://www.instagram.com/valeriacmsmiranda" target="_blank" rel="noopener">@valeriacmsmiranda</a></small>
+        </article>'''
+
+          section_match = re.search(r'(<section id="depoimentos".*?<div class="grid cards-3">)(.*?)(</div>\s*</div>\s*</section>)', html, re.S)
+
+          if not section_match:
+              raise SystemExit("Seção de depoimentos não encontrada.")
+
+          body = section_match.group(2)
+
+          placeholder = re.search(
+              r'\s*<article class="quote">.*?<small>Depoimento a inserir</small>\s*</article>',
+              body,
+              re.S
+          )
+
+          if placeholder:
+              body = body[:placeholder.start()] + "\n" + card + body[placeholder.end():]
+          else:
+              body = body + "\n" + card
+
+          html = (
+              html[:section_match.start()]
+              + section_match.group(1)
+              + body
+              + section_match.group(3)
+              + html[section_match.end():]
+          )
+
+          p.write_text(html, encoding="utf-8")
+          PY
+
+      - name: Salvar atualização
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git diff --cached --quiet && exit 0
+          git commit -m "Adicionar depoimento de @valeriacmsmiranda"
+          git push
