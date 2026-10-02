@@ -1,0 +1,68 @@
+name: Adicionar depoimento Dodora Andrade
+
+on:
+  push:
+    paths:
+      - '.github/workflows/add-depoimento-dodora.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  atualizar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Inserir depoimento
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          p = Path("index.html")
+          html = p.read_text(encoding="utf-8")
+
+          if '@andradedodora' in html:
+              raise SystemExit(0)
+
+          old = '''        <article class="quote">
+          <div class="stars">★★★★★</div>
+          <p>Adicione aqui um depoimento real de aluno ou responsável sobre a experiência com a Axios.</p>
+          <small>Depoimento a inserir</small>
+        </article>'''
+
+          new = '''        <article class="quote">
+          <span class="tag">Depoimento</span>
+          <p>“Excelente aula! Estou amando fazer o Tai Chi Chuan.”</p>
+          <small>Dodora Andrade</small>
+          <p style="margin-top:10px;font-size:14px;">
+            <a href="https://www.instagram.com/andradedodora" target="_blank" rel="noopener" style="color:var(--accent2);">@andradedodora</a>
+          </p>
+        </article>'''
+
+          if old in html:
+              html = html.replace(old, new, 1)
+          else:
+              anchor = '<div class="grid cards-3">'
+              section_pos = html.find('id="depoimentos"')
+              if section_pos == -1:
+                  raise SystemExit("Seção de depoimentos não encontrada")
+              grid_pos = html.find(anchor, section_pos)
+              if grid_pos == -1:
+                  raise SystemExit("Grade de depoimentos não encontrada")
+              insert_pos = grid_pos + len(anchor)
+              html = html[:insert_pos] + '\n' + new + html[insert_pos:]
+
+          p.write_text(html, encoding="utf-8")
+          PY
+
+      - name: Salvar atualização
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git diff --cached --quiet && exit 0
+          git commit -m "Adicionar depoimento de Dodora Andrade"
+          git push
